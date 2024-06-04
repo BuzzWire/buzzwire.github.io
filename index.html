@@ -23,41 +23,19 @@
   </main>
 
   <script>
-    let posts = [];
-    const postsFilePath = 'posts.json';
+    let posts = JSON.parse(localStorage.getItem('posts')) || [];
 
     function loadPosts() {
       console.log('Cargando publicaciones...');
-      $.ajax({
-        url: postsFilePath,
-        dataType: 'json',
-        success: function(data) {
-          posts = data.posts;
-          $('#posts').empty();
-          $.each(posts, function(index, post) {
-            $('#posts').append(`<li>${post.title}</li>`);
-          });
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-          console.error('Error al cargar las publicaciones:', errorThrown);
-        }
+      $('#posts').empty();
+      $.each(posts, function(index, post) {
+        $('#posts').append(`<li>${post.title}</li>`);
       });
     }
 
-    function updatePostsFile() {
-      $.ajax({
-        url: postsFilePath,
-        type: 'PUT',
-        data: JSON.stringify({ posts: posts }),
-        contentType: 'application/json; charset=utf-8',
-        dataType: 'json',
-        success: function(data) {
-          console.log('Archivo posts.json actualizado.');
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-          console.error('Error al actualizar el archivo posts.json:', errorThrown);
-        }
-      });
+    function savePosts() {
+      console.log('Guardando publicaciones...');
+      localStorage.setItem('posts', JSON.stringify(posts));
     }
 
     function createPost() {
@@ -73,7 +51,7 @@
         };
 
         posts.push(newPost);
-        updatePostsFile();
+        savePosts();
 
         $('#postTitle').val('');
         $('#postContent').val('');
