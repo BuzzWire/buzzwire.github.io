@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat Mensajería</title>
+    <title>Chat de Mensajería</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -52,8 +52,12 @@
 
     <script>
         const savedMessages = document.getElementById('savedMessages');
+        const token = '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';
+        const repoOwner = 'BuzzWire';
+        const repoName = 'buzzwire.github.io';
+        const filePath = 'msj.txt';
 
-        function saveMessage() {
+        async function saveMessage() {
             const message = document.getElementById('messageInput').value;
             
             if (message.trim() === '') {
@@ -63,14 +67,32 @@
 
             const timestamp = new Date().toLocaleString();
             const formattedMessage = `${timestamp} - ${message}\n`;
-                
-            // Guardar el mensaje en el archivo msj.txt
-            const blob = new Blob([formattedMessage], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'msj.txt';
-            a.click();
+
+            const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`, {
+                method: 'GET',
+                headers: {
+                    Authorization: `token ${token}`
+                }
+            });
+
+            const data = await response.json();
+            const sha = data.sha;
+            const content = data.content;
+
+            const newContent = btoa(`${atob(content) + formattedMessage}`);
+
+            await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`, {
+                method: 'PUT',
+                headers: {
+                    Authorization: `token ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: 'Actualización de mensaje',
+                    content: newContent,
+                    sha: sha
+                })
+            });
 
             savedMessages.textContent += `${timestamp} - Mensaje enviado: ${message}\n`;
             document.getElementById('messageInput').value = '';
