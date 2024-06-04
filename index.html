@@ -1,94 +1,79 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat de Mensajería</title>
-    <style>
-        .container {
-            width: 100%;
-            margin-bottom: 10px;
-            padding: 10px;
-        }
-        textarea {
-            width: 100%;
-            height: 100px;
-            margin-bottom: 10px;
-            padding: 10px;
-            font-size: 16px;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background: #0056b3;
-        }
-        p {
-            font-size: 16px;
-        }
-    </style>
+  <title>Dropbox Database Example</title>
 </head>
 <body>
-    <div class="container">
-        <h1>Chat de Mensajería</h1>
-        <textarea id="messageInput"></textarea>
-        <button onclick="saveMessage()">Enviar Mensaje</button>
-        <p id="savedMessages"></p>
-    </div>
+  <h1>Dropbox Database Example</h1>
 
-    <script>
-        const savedMessages = document.getElementById('savedMessages');
-        const token = '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';
-        const repoOwner = 'BuzzWire';
-        const repoName = 'buzzwire.github.io';
-        const filePath = 'contents/msj.txt';
-        
-        async function saveMessage() {
-            const message = document.getElementById('messageInput').value;
-            
-            if (message.trim() === '') {
-                alert('Por favor ingrese un mensaje');
-                return;
-            }
+  <div id="messages"></div>
 
-            const timestamp = new Date().toLocaleString();
-            const formattedMessage = `${timestamp} - ${message}\n`;
+  <input type="text" id="newMessage" placeholder="Ingresa un nuevo mensaje">
+  <button onclick="saveMessage()">Guardar Mensaje</button>
 
-            const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/${filePath}`, {
-                method: 'GET',
-                headers: {
-                    Authorization: `token ${token}`,
-                }
-            });
+  <script>
+    // Reemplaza con tu token de acceso a Dropbox
+    const ACCESS_TOKEN = 'czs5j78prk9f9b0';
 
-            const data = await response.json();
-            const sha = data.sha;
-            const content = data.content;
+    // Ruta al archivo de texto en Dropbox
+    const FILE_PATH = '/ChatSocial.txt';
 
-            const newContent = btoa(`${atob(content) + formattedMessage}`);
-
-            await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`, {
-                method: 'PUT',
-                headers: {
-                    Authorization: `token ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    message: 'Actualización de mensaje',
-                    content: newContent,
-                    sha: sha
-                })
-            });
-
-            savedMessages.textContent += `${timestamp} - Mensaje enviado: ${message}\n`;
-            document.getElementById('messageInput').value = '';
+    // Función para leer los mensajes del archivo de Dropbox
+    function readMessages() {
+      fetch('https://content.dropboxapi.com/2/files/download', {
+        headers: {
+          'Dropbox-API-Arg': JSON.stringify({
+            'path': FILE_PATH
+          }),
+          'Authorization': 'Bearer ' + ACCESS_TOKEN
         }
-    </script>
+      })
+      .then(response => response.text())
+      .then(data => {
+        // Mostrar los mensajes en la página
+        document.getElementById('messages').textContent = data;
+      })
+      .catch(error => {
+        console.error('Error al leer los mensajes:', error);
+      });
+    }
+
+    // Función para guardar un nuevo mensaje en Dropbox
+    function saveMessage() {
+      const newMessage = document.getElementById('newMessage').value;
+      if (newMessage.trim() !== '') {
+        fetch('https://content.dropboxapi.com/2/files/upload', {
+          method: 'POST',
+          headers: {
+            'Dropbox-API-Arg': JSON.stringify({
+              'path': FILE_PATH,
+              'mode': 'overwrite',
+              'autorename': false,
+              'mute': false
+            }),
+            'Content-Type': 'application/octet-stream',
+            'Authorization': 'Bearer ' + ACCESS_TOKEN
+          },
+          body: newMessage
+        })
+        .then(response => {
+          if (response.ok) {
+            // Limpiar el campo de entrada
+            document.getElementById('newMessage').value = '';
+            // Volver a leer los mensajes
+            readMessages();
+          } else {
+            console.error('Error al guardar el mensaje:', response.status);
+          }
+        })
+        .catch(error => {
+          console.error('Error al guardar el mensaje:', error);
+        });
+      }
+    }
+
+    // Leer los mensajes al cargar la página
+    readMessages();
+  </script>
 </body>
 </html>
