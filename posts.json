@@ -1,0 +1,13 @@
+// posts.json
+[
+  {
+    "id": 1,
+    "title": "Publicación 1",
+    "content": "Este es el contenido de la publicación 1"
+  },
+  {
+    "id": 2,
+    "title": "Publicación 2",
+    "content": "Este es el contenido de la publicación 2"
+  }
+]
