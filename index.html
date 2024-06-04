@@ -3,7 +3,47 @@
 <head>
   <title>BuzzWire</title>
   <style>
-    /* CSS styles here */
+    body {
+      font-family: Arial, sans-serif;
+    }
+    
+    header {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 10px 0;
+    }
+    
+    main {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .post-form {
+      margin-bottom: 20px;
+    }
+    
+    .post-form input,
+    .post-form textarea,
+    .post-form button {
+      display: block;
+      margin-bottom: 10px;
+      width: 100%;
+      padding: 5px;
+    }
+    
+    .posts-container ul {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .posts-container li {
+      background-color: #f9f9f9;
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+      padding: 10px;
+    }
   </style>
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 </head>
@@ -29,7 +69,7 @@
       console.log('Cargando publicaciones...');
       $('#posts').empty();
       $.each(posts, function(index, post) {
-        $('#posts').append(`<li>${post.title}</li>`);
+        $('#posts').append(`<li><strong>${post.title}</strong>: ${post.content}</li>`);
       });
     }
 
