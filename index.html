@@ -7,17 +7,49 @@
 </head>
 <body>
   <h1>BuzzWire</h1>
+  <input type="text" id="postInput" placeholder="Ingresa tu publicación">
+  <button id="postButton">Publicar</button>
   <ul id="posts"></ul>
 
   <script>
-    $.ajax({
-      url: 'posts.json',
-      dataType: 'json',
-      success: function(data) {
-        $.each(data, function(index, post) {
-          $('#posts').append('<li>' + post.title + '</li>');
+    // Función para cargar las publicaciones desde el archivo posts.json
+    function loadPosts() {
+      $.ajax({
+        url: 'posts.json',
+        dataType: 'json',
+        success: function(data) {
+          $('#posts').empty();
+          $.each(data, function(index, post) {
+            $('#posts').append('<li>' + post.title + '</li>');
+          });
+        }
+      });
+    }
+
+    // Función para guardar una nueva publicación en posts.json
+    function createPost() {
+      var postText = $('#postInput').val();
+      if (postText.trim() !== '') {
+        $.ajax({
+          url: 'posts.json',
+          type: 'POST',
+          data: JSON.stringify({ title: postText }),
+          contentType: 'application/json; charset=utf-8',
+          dataType: 'json',
+          success: function(data) {
+            $('#postInput').val('');
+            loadPosts();
+          }
         });
       }
+    }
+
+    // Carga las publicaciones inicialmente
+    loadPosts();
+
+    // Agrega un evento de clic al botón de publicación
+    $('#postButton').click(function() {
+      createPost();
     });
   </script>
 </body>
