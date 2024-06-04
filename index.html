@@ -15,41 +15,54 @@
   <ul id="posts"></ul>
 
   <script>
-    function loadPosts() {
-      $.ajax({
-        url: 'posts.json',
-        dataType: 'json',
-        success: function(data) {
-          $('#posts').empty();
-          $.each(data, function(index, post) {
-            $('#posts').append('<li>' + post.title + '</li>');
-          });
-        }
+    // index.html
+<script>
+  let posts = [];
+
+function loadPosts() {
+  $.ajax({
+    url: 'posts.json',
+    dataType: 'json',
+    success: function(data) {
+      posts = data.posts;
+      $('#posts').empty();
+      $.each(posts, function(index, post) {
+        $('#posts').append(`<li>${post.title}</li>`);
       });
     }
+  });
+}
 
-    function createPost() {
-      const title = $('#postTitle').val();
-      const content = $('#postContent').val();
+function createPost() {
+  const postTitle = $('#postTitle').val();
+  const postContent = $('#postContent').val();
 
-      if (title.trim() !== '' && content.trim() !== '') {
-        $.ajax({
-          url: 'posts.json',
-          type: 'POST',
-          data: JSON.stringify({ title: title, content: content }),
-          contentType: 'application/json; charset=utf-8',
-          dataType: 'json',
-          success: function(data) {
-            $('#postTitle').val('');
-            $('#postContent').val('');
-            loadPosts();
-          }
-        });
+  if (postTitle.trim() !== '' && postContent.trim() !== '') {
+    const newPost = {
+      id: posts.length + 1,
+      title: postTitle,
+      content: postContent
+    };
+
+    posts.push(newPost);
+
+    $.ajax({
+      url: 'posts.json',
+      type: 'PUT',
+      data: JSON.stringify({ posts: posts }),
+      contentType: 'application/json; charset=utf-8',
+      dataType: 'json',
+      success: function(data) {
+        $('#postTitle').val('');
+        $('#postContent').val('');
+        loadPosts();
       }
-    }
+    });
+  }
+}
 
-    $('#postButton').click(createPost);
-    loadPosts();
+$('#postButton').click(createPost);
+loadPosts();
   </script>
 </body>
 </html>
