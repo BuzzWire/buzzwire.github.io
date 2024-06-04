@@ -5,22 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat de Mensajería</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
         .container {
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background: #f9f9f9;
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
         }
         textarea {
             width: 100%;
-            height: 200px;
+            height: 100px;
             margin-bottom: 10px;
             padding: 10px;
             font-size: 16px;
@@ -52,11 +44,11 @@
 
     <script>
         const savedMessages = document.getElementById('savedMessages');
-        const token = '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'; 
+        const token = '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';
         const repoOwner = 'BuzzWire';
         const repoName = 'buzzwire.github.io';
         const filePath = 'msj.txt';
-
+        
         async function saveMessage() {
             const message = document.getElementById('messageInput').value;
             
@@ -68,10 +60,10 @@
             const timestamp = new Date().toLocaleString();
             const formattedMessage = `${timestamp} - ${message}\n`;
 
-            const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/${filePath}`, {
+            const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`, {
                 method: 'GET',
                 headers: {
-                    Authorization: `token ${token}`
+                    Authorization: `token ${token}`,
                 }
             });
 
@@ -81,7 +73,7 @@
 
             const newContent = btoa(`${atob(content) + formattedMessage}`);
 
-            await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/${filePath}`, {
+            await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`, {
                 method: 'PUT',
                 headers: {
                     Authorization: `token ${token}`,
