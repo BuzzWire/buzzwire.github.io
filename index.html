@@ -81,7 +81,7 @@
 
             const newContent = btoa(`${atob(content) + formattedMessage}`);
 
-            await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`, {
+            await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/${filePath}`, {
                 method: 'PUT',
                 headers: {
                     Authorization: `token ${token}`,
