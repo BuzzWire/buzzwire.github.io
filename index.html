@@ -101,6 +101,9 @@
           $.each(posts, function(index, post) {
             $('#posts').append(`<li>${post.title}</li>`);
           });
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          console.error('Error al cargar las publicaciones:', errorThrown);
         }
       });
     }
@@ -121,7 +124,7 @@
 
         $.ajax({
           url: 'posts.json',
-          type: 'PUT',
+          type: 'POST',
           data: JSON.stringify({ posts: posts }),
           contentType: 'application/json; charset=utf-8',
           dataType: 'json',
@@ -129,6 +132,9 @@
             $('#postTitle').val('');
             $('#postContent').val('');
             loadPosts();
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+            console.error('Error al publicar la publicación:', errorThrown);
           }
         });
       }
