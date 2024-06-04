@@ -45,6 +45,9 @@
 <body>
     <div class="container">
         <h1>Editor de Archivo de Texto</h1>
+        <input type="file" id="fileInput" accept=".txt">
+        <button onclick="saveFile()">Cargar Archivo</button>
+        <p id="fileText"></p>
         <textarea id="fileContent"></textarea>
         <button onclick="saveFile()">Guardar</button>
         <p id="savedContent"></p>
@@ -53,7 +56,8 @@
     <script>
         const fileContent = document.getElementById('fileContent');
         const savedContent = document.getElementById('savedContent');
-        
+        const fileText = document.getElementById('fileText');
+
         // Cargar el contenido del archivo al cargar la página
         window.onload = function() {
             const file = `Esto es un ejemplo de contenido de archivo de texto
@@ -64,6 +68,19 @@ que se cargará cuando se abra la página`;
         function saveFile() {
             const content = fileContent.value;
             savedContent.textContent = 'Contenido guardado: ' + content;
+            const file = document.getElementById('fileInput').files[0];
+            if (file) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const fileTextContent = e.target.result;
+                    fileText.textContent = `Contenido del archivo ${file.name}: ${fileTextContent}`;
+                };
+                
+                reader.readAsText(file);
+            } else {
+                alert('Por favor selecciona un archivo .txt');
+            }
         }
     </script>
 </body>
