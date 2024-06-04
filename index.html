@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editor de Archivo de Texto</title>
+    <title>Chat Mensajería</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -44,43 +44,36 @@
 </head>
 <body>
     <div class="container">
-        <h1>Editor de Archivo de Texto</h1>
-        <input type="file" id="fileInput" accept=".txt">
-        <button onclick="saveFile()">Cargar Archivo</button>
-        <p id="fileText"></p>
-        <textarea id="fileContent"></textarea>
-        <button onclick="saveFile()">Guardar</button>
-        <p id="savedContent"></p>
+        <h1>Chat de Mensajería</h1>
+        <textarea id="messageInput"></textarea>
+        <button onclick="saveMessage()">Enviar Mensaje</button>
+        <p id="savedMessages"></p>
     </div>
 
     <script>
-        const fileContent = document.getElementById('fileContent');
-        const savedContent = document.getElementById('savedContent');
-        const fileText = document.getElementById('fileText');
+        const savedMessages = document.getElementById('savedMessages');
 
-        // Cargar el contenido del archivo al cargar la página
-        window.onload = function() {
-            const file = `Esto es un ejemplo de contenido de archivo de texto
-que se cargará cuando se abra la página`;
-            fileContent.value = file;
-        }
-
-        function saveFile() {
-            const content = fileContent.value;
-            savedContent.textContent = 'Contenido guardado: ' + content;
-            const file = document.getElementById('fileInput').files[0];
-            if (file) {
-                const reader = new FileReader();
-                
-                reader.onload = function(e) {
-                    const fileTextContent = e.target.result;
-                    fileText.textContent = `Contenido del archivo ${file.name}: ${fileTextContent}`;
-                };
-                
-                reader.readAsText(file);
-            } else {
-                alert('Por favor selecciona un archivo .txt');
+        function saveMessage() {
+            const message = document.getElementById('messageInput').value;
+            
+            if (message.trim() === '') {
+                alert('Por favor ingrese un mensaje');
+                return;
             }
+
+            const timestamp = new Date().toLocaleString();
+            const formattedMessage = `${timestamp} - ${message}\n`;
+                
+            // Guardar el mensaje en el archivo msj.txt
+            const blob = new Blob([formattedMessage], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'msj.txt';
+            a.click();
+
+            savedMessages.textContent += `${timestamp} - Mensaje enviado: ${message}\n`;
+            document.getElementById('messageInput').value = '';
         }
     </script>
 </body>
