@@ -1,83 +1,20 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BuzzWire - Iniciar Sesión</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f3f3f3;
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    .login-form {
-      margin: 100px auto;
-      padding: 20px;
-      max-width: 300px;
-      background: #fff;
-      border-radius: 5px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    form {
-      display: flex;
-      flex-direction: column;
-    }
-
-    input {
-      margin: 5px 0;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-
-    button {
-      margin: 10px 0 0 0;
-      padding: 10px;
-      background: #007bff;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #0056b3;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BuzzWire - Iniciar Sesión</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="login-form">
-    <h2>Iniciar Sesión en BuzzWire</h2>
-    <form>
-      <input type="email" placeholder="Correo electrónico" required>
-      <input type="password" placeholder="Contraseña" required>
-      <button type="submit">Iniciar Sesión</button>
-    </form>
-  </div>
-  <script>
-    document.querySelector('form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const email = e.target.querySelector('input[type="email"]').value;
-    const password = e.target.querySelector('input[type="password"]').value;
-
-  // Llamar a la función para guardar las credenciales
-  fetch('URL_DE_TU_BACKEND', {
-    method: 'POST',
-    body: JSON.stringify({ email, password }),
-    headers: {
-      'Content-Type': 'application/json'
-    },
-  })
-  .then(response => response.json())
-  .then(data => {
-    alert('Email: ' + email + '\nContraseña: ' + password);
-  })
-  .catch(error => console.error('Error:', error));
-});
-  </script>
+<div class="login-form">
+  <h2>Iniciar Sesión en BuzzWire</h2>
+  <form>
+    <input type="email" placeholder="Correo electrónico" required>
+    <input type="password" placeholder="Contraseña" required>
+    <button type="submit">Iniciar Sesión</button>
+  </form>
+</div>
+<script src="script.js"></script>
 </body>
 </html>
