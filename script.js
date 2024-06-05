@@ -1,14 +1,21 @@
-const jsonUrl = 'https://raw.githubusercontent.com/BuzzWire/buzzwire.github.io/main/msj.json';
+const jsonUrl = 'https://api.github.com/repos/BuzzWire/buzzwire.github.io/contents/msj.json';
 const variable1Input = document.getElementById('variable1');
 const variable2Input = document.getElementById('variable2');
 const saveChangesButton = document.getElementById('saveChanges');
 
+// Obtener el token de acceso de GitHub
+const githubToken = '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';
+
 // Función para leer el archivo JSON
 async function readJsonFile() {
   try {
-    const response = await fetch(jsonUrl);
+    const response = await fetch(jsonUrl, {
+      headers: {
+        'Authorization': `Bearer ${githubToken}`
+      }
+    });
     const data = await response.json();
-    return data;
+    return JSON.parse(atob(data.content));
   } catch (error) {
     console.error('Error al leer el archivo JSON:', error);
   }
@@ -20,9 +27,13 @@ async function updateJsonFile(data) {
     const response = await fetch(jsonUrl, {
       method: 'PUT',
       headers: {
+        'Authorization': `Bearer ${githubToken}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify({
+        message: 'Actualizar variables en msj.json',
+        content: btoa(JSON.stringify(data))
+      })
     });
     if (response.ok) {
       console.log('Archivo JSON actualizado exitosamente');
