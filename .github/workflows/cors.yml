@@ -1,0 +1,16 @@
+name: CORS Configuration
+on:
+  push:
+    branches: [main]
+
+jobs:
+  cors-config:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Configure CORS
+        run: |
+          curl -X PUT \
+          -H "Content-Type: application/json" \
+          -d '{"cors":[{"origin":["https://buzzwire.github.io"],"method":["GET","PUT"],"maxAgeSeconds":3600}]}' \
+          https://api.github.com/repos/${{ github.repository }}/pages/access_control
