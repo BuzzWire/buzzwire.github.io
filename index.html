@@ -1,43 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chat System</title>
+  <title>Modificar variables en JSON</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="chat-container">
-    <div class="chat-header">
-      <h2>Chat</h2>
-      <div class="chat-controls">
-        <button class="btn-minimize">-</button>
-        <button class="btn-close">x</button>
-      </div>
+  <div class="container">
+    <h1>Modificar variables en JSON</h1>
+    <div class="input-group">
+      <label for="variable1">Variable 1:</label>
+      <input type="text" id="variable1" name="variable1">
     </div>
-    <div class="chat-body">
-      <div class="message-container">
-        <div class="message received">
-          <img src="user-avatar.png" alt="User Avatar" class="avatar">
-          <div class="message-content">
-            <p class="username">John Doe</p>
-            <p class="text">Hi there! How are you doing today?</p>
-            <span class="timestamp">12:30 PM</span>
-          </div>
-        </div>
-        <div class="message sent">
-          <div class="message-content">
-            <p class="text">I'm doing great, thanks for asking! How about you?</p>
-            <span class="timestamp">12:31 PM</span>
-          </div>
-          <img src="user-avatar.png" alt="User Avatar" class="avatar">
-        </div>
-      </div>
+    <div class="input-group">
+      <label for="variable2">Variable 2:</label>
+      <input type="text" id="variable2" name="variable2">
     </div>
-    <div class="chat-footer">
-      <input type="text" placeholder="Type your message..." class="chat-input">
-      <button class="btn-send">Send</button>
-    </div>
+    <button id="saveChanges">Guardar cambios</button>
   </div>
+  <script src="script.js"></script>
 </body>
 </html>
